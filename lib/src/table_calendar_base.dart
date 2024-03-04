@@ -209,7 +209,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                 curve: widget.formatAnimationCurve,
                 alignment: Alignment.topCenter,
                 child: SizedBox(
-                  height: height,
+                  height: value,
                   child: child,
                 ),
               );
