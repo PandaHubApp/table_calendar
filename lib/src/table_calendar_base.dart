@@ -330,32 +330,38 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
   int _getRowCountWithAvailableSlots(
       CalendarFormat format, DateTime focusedDay) {
-    final first = _firstDayOfMonth(focusedDay);
-    final daysBefore = _getDaysBefore(first);
-    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+    try {
+      final first = _firstDayOfMonth(focusedDay);
+      final daysBefore = _getDaysBefore(first);
+      final firstToDisplay = first.subtract(Duration(days: daysBefore));
 
-    final regularRowCount = _getRowCount(format, focusedDay);
+      final regularRowCount = _getRowCount(format, focusedDay);
 
-    int rowCount = 0;
+      int rowCount = 0;
 
-    DateTime datePointer = firstToDisplay;
-    for (int i = 0; i < regularRowCount; i++) {
-      print('row number $i');
-      for (DateTime date = datePointer;
-          date.isBefore(date.add(Duration(days: 7))) ||
-              date.isAtSameMomentAs(date.add(Duration(days: 7)));
-          date = date.add(Duration(days: 1))) {
-        final hasAvailableSlot =
-            widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
-        if (hasAvailableSlot) {
-          rowCount++;
-          break;
+      DateTime datePointer = firstToDisplay;
+      for (int i = 0; i < regularRowCount; i++) {
+        print('row number $i');
+        for (DateTime date = datePointer;
+            date.isBefore(date.add(Duration(days: 7))) ||
+                date.isAtSameMomentAs(date.add(Duration(days: 7)));
+            date = date.add(Duration(days: 1))) {
+          final hasAvailableSlot =
+              widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
+          if (hasAvailableSlot) {
+            rowCount++;
+            break;
+          }
         }
+        datePointer = datePointer.add(Duration(days: 7));
       }
-      datePointer = datePointer.add(Duration(days: 7));
-    }
 
-    return rowCount;
+      return rowCount;
+    } catch (e) {
+      print(e);
+    } finally {
+      return 0;
+    }
   }
 
   bool _isSameDay(DateTime date1, DateTime date2) {
