@@ -101,6 +101,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final activeRowCount =
         _getRowCountWithAvailableSlots(widget.calendarFormat, _focusedDay);
     _pageHeight = ValueNotifier(_getPageHeight(rowCount, activeRowCount));
+    print(_pageHeight);
 
     final initialPage = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, _focusedDay);
@@ -276,7 +277,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final tablePaddingHeight = widget.tablePadding?.vertical ?? 0.0;
     final dowHeight = widget.dowVisible ? widget.dowHeight! : 0.0;
     print(activeRowCount);
-    return dowHeight + rowCount * widget.rowHeight + tablePaddingHeight;
+    return dowHeight +
+        rowCount * widget.rowHeight +
+        tablePaddingHeight +
+        activeRowCount * 30;
   }
 
   int _calculateFocusedPage(
