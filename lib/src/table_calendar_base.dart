@@ -282,10 +282,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         rowCount * widget.rowHeight +
         tablePaddingHeight +
         activeRowCount * 30);
-    return dowHeight +
-        rowCount * widget.rowHeight +
-        tablePaddingHeight +
-        activeRowCount * 30;
+    return dowHeight + rowCount * 36 + tablePaddingHeight + activeRowCount * 30;
   }
 
   int _calculateFocusedPage(
