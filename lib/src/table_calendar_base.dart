@@ -277,6 +277,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final tablePaddingHeight = widget.tablePadding?.vertical ?? 0.0;
     final dowHeight = widget.dowVisible ? widget.dowHeight! : 0.0;
     print(activeRowCount);
+    print('page height');
     print(dowHeight +
         rowCount * widget.rowHeight +
         tablePaddingHeight +
@@ -349,24 +350,24 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
       DateTime datePointer = firstToDisplay;
       for (int i = 0; i < regularRowCount; i++) {
-        print('row number $i');
+        // print('row number $i');
         final endOfTheRowDate = datePointer.add(Duration(days: 7));
         for (DateTime date = datePointer;
             date.isBefore(endOfTheRowDate) ||
                 date.isAtSameMomentAs(endOfTheRowDate);
             date = date.add(Duration(days: 1))) {
-          print('day number ${date.day}');
+          // print('day number ${date.day}');
           final hasAvailableSlot =
               widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
           if (hasAvailableSlot) {
             rowCount++;
-            print('incremented: $rowCount');
+            // print('incremented: $rowCount');
             break;
           }
         }
         datePointer = datePointer.add(Duration(days: 7));
       }
-      print("rowCount $rowCount");
+      // print("rowCount $rowCount");
 
       return rowCount;
     } catch (e) {
