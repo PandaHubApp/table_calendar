@@ -330,38 +330,35 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
   int _getRowCountWithAvailableSlots(
       CalendarFormat format, DateTime focusedDay) {
-    try {
-      final first = _firstDayOfMonth(focusedDay);
-      final daysBefore = _getDaysBefore(first);
-      final firstToDisplay = first.subtract(Duration(days: daysBefore));
+    return 0;
+    final first = _firstDayOfMonth(focusedDay);
+    final daysBefore = _getDaysBefore(first);
+    final firstToDisplay = first.subtract(Duration(days: daysBefore));
 
-      final regularRowCount = _getRowCount(format, focusedDay);
+    final last = _lastDayOfMonth(focusedDay);
+    final daysAfter = _getDaysAfter(last);
+    final lastToDisplay = last.add(Duration(days: daysAfter));
 
-      int rowCount = 0;
+    final regularRowCount = _getRowCount(format, focusedDay);
 
-      DateTime datePointer = firstToDisplay;
-      for (int i = 0; i < regularRowCount; i++) {
-        print('row number $i');
-        for (DateTime date = datePointer;
-            date.isBefore(date.add(Duration(days: 7))) ||
-                date.isAtSameMomentAs(date.add(Duration(days: 7)));
-            date = date.add(Duration(days: 1))) {
-          final hasAvailableSlot =
-              widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
-          if (hasAvailableSlot) {
-            rowCount++;
-            break;
-          }
+    int rowCount = 0;
+
+    for (int i = 0; i < regularRowCount; i++) {
+      for (DateTime date = firstToDisplay;
+          date.isBefore(lastToDisplay) || date.isAtSameMomentAs(lastToDisplay);
+          date = date.add(Duration(days: 1))) {
+        final hasAvailableSlot =
+            widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
+        if (hasAvailableSlot) {
+          rowCount++;
         }
-        datePointer = datePointer.add(Duration(days: 7));
+        if (date.weekday == DateTime.sunday && date != lastToDisplay) {
+          rowCount++; // Increment row count at the end of each week
+        }
       }
-
-      return rowCount;
-    } catch (e) {
-      print(e);
-    } finally {
-      return 0;
     }
+
+    return rowCount;
   }
 
   bool _isSameDay(DateTime date1, DateTime date2) {
