@@ -330,14 +330,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
   int _getRowCountWithAvailableSlots(
       CalendarFormat format, DateTime focusedDay) {
-    if (format == CalendarFormat.twoWeeks) {
-      return 2;
-    } else if (format == CalendarFormat.week) {
-      return 1;
-    } else if (widget.sixWeekMonthsEnforced) {
-      return 6;
-    }
-
     final first = _firstDayOfMonth(focusedDay);
     final daysBefore = _getDaysBefore(first);
     final firstToDisplay = first.subtract(Duration(days: daysBefore));
@@ -346,21 +338,28 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final daysAfter = _getDaysAfter(last);
     final lastToDisplay = last.add(Duration(days: daysAfter));
 
+    final regularRowCount = _getRowCount(format, focusedDay);
+
     int rowCount = 0;
-    for (DateTime date = firstToDisplay;
-        date.isBefore(lastToDisplay) || date.isAtSameMomentAs(lastToDisplay);
-        date = date.add(Duration(days: 1))) {
-      final hasAvailableSlot =
-          widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
-      if (hasAvailableSlot) {
-        rowCount++;
+
+    DateTime datePointer = firstToDisplay;
+    for (int i = 0; i < regularRowCount; i++) {
+      print('row number $i');
+      for (DateTime date = datePointer;
+          date.isBefore(date.add(Duration(days: 7))) ||
+              date.isAtSameMomentAs(date.add(Duration(days: 7)));
+          date = date.add(Duration(days: 1))) {
+        final hasAvailableSlot =
+            widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
+        if (hasAvailableSlot) {
+          rowCount++;
+          break;
+        }
       }
-      if (date.weekday == DateTime.sunday && date != lastToDisplay) {
-        rowCount++; // Increment row count at the end of each week
-      }
+      datePointer = datePointer.add(Duration(days: 7));
     }
 
-    return rowCount.clamp(0, 3); // Limit rowCount to be between 0 and 3
+    return rowCount;
   }
 
   bool _isSameDay(DateTime date1, DateTime date2) {
