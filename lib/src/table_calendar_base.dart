@@ -334,10 +334,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final daysBefore = _getDaysBefore(first);
     final firstToDisplay = first.subtract(Duration(days: daysBefore));
 
-    final last = _lastDayOfMonth(focusedDay);
-    final daysAfter = _getDaysAfter(last);
-    final lastToDisplay = last.add(Duration(days: daysAfter));
-
     final regularRowCount = _getRowCount(format, focusedDay);
 
     int rowCount = 0;
