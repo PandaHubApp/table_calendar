@@ -98,7 +98,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     _focusedDay = widget.focusedDay;
 
     final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-    _pageHeight = ValueNotifier(_getPageHeight(rowCount));
+    final activeRowCount =
+        _getRowCountWithAvailableSlots(widget.calendarFormat, _focusedDay);
+    _pageHeight = ValueNotifier(_getPageHeight(rowCount, activeRowCount));
 
     final initialPage = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, _focusedDay);
@@ -128,7 +130,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         widget.dowVisible != oldWidget.dowVisible ||
         widget.sixWeekMonthsEnforced != oldWidget.sixWeekMonthsEnforced) {
       final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-      _pageHeight.value = _getPageHeight(rowCount);
+      final activeRowCount =
+          _getRowCountWithAvailableSlots(widget.calendarFormat, _focusedDay);
+      _pageHeight.value = _getPageHeight(rowCount, activeRowCount);
     }
   }
 
@@ -179,7 +183,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
     _previousIndex = currentIndex;
     final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-    _pageHeight.value = _getPageHeight(rowCount);
+    final activeRowCount =
+        _getRowCountWithAvailableSlots(widget.calendarFormat, _focusedDay);
+    _pageHeight.value = _getPageHeight(rowCount, activeRowCount);
 
     _pageCallbackDisabled = false;
   }
@@ -243,7 +249,12 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                       widget.calendarFormat,
                       focusedMonth,
                     );
-                    _pageHeight.value = _getPageHeight(rowCount);
+                    final activeRowCount = _getRowCountWithAvailableSlots(
+                      widget.calendarFormat,
+                      _focusedDay,
+                    );
+                    _pageHeight.value =
+                        _getPageHeight(rowCount, activeRowCount);
                   }
 
                   _previousIndex = index;
@@ -261,9 +272,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     );
   }
 
-  double _getPageHeight(int rowCount) {
+  double _getPageHeight(int rowCount, int activeRowCount) {
     final tablePaddingHeight = widget.tablePadding?.vertical ?? 0.0;
     final dowHeight = widget.dowVisible ? widget.dowHeight! : 0.0;
+    print(activeRowCount);
     return dowHeight + rowCount * widget.rowHeight + tablePaddingHeight;
   }
 
@@ -314,6 +326,47 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final lastToDisplay = last.add(Duration(days: daysAfter));
 
     return (lastToDisplay.difference(firstToDisplay).inDays + 1) ~/ 7;
+  }
+
+  int _getRowCountWithAvailableSlots(
+      CalendarFormat format, DateTime focusedDay) {
+    if (format == CalendarFormat.twoWeeks) {
+      return 2;
+    } else if (format == CalendarFormat.week) {
+      return 1;
+    } else if (widget.sixWeekMonthsEnforced) {
+      return 6;
+    }
+
+    final first = _firstDayOfMonth(focusedDay);
+    final daysBefore = _getDaysBefore(first);
+    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+
+    final last = _lastDayOfMonth(focusedDay);
+    final daysAfter = _getDaysAfter(last);
+    final lastToDisplay = last.add(Duration(days: daysAfter));
+
+    int rowCount = 0;
+    for (DateTime date = firstToDisplay;
+        date.isBefore(lastToDisplay) || date.isAtSameMomentAs(lastToDisplay);
+        date = date.add(Duration(days: 1))) {
+      final hasAvailableSlot =
+          widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
+      if (hasAvailableSlot) {
+        rowCount++;
+      }
+      if (date.weekday == DateTime.sunday && date != lastToDisplay) {
+        rowCount++; // Increment row count at the end of each week
+      }
+    }
+
+    return rowCount.clamp(0, 3); // Limit rowCount to be between 0 and 3
+  }
+
+  bool _isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
   }
 
   int _getDaysBefore(DateTime firstDay) {
