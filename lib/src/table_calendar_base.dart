@@ -330,35 +330,41 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
   int _getRowCountWithAvailableSlots(
       CalendarFormat format, DateTime focusedDay) {
-    return 0;
-    final first = _firstDayOfMonth(focusedDay);
-    final daysBefore = _getDaysBefore(first);
-    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+    try {
+      final first = _firstDayOfMonth(focusedDay);
+      final daysBefore = _getDaysBefore(first);
+      final firstToDisplay = first.subtract(Duration(days: daysBefore));
 
-    final last = _lastDayOfMonth(focusedDay);
-    final daysAfter = _getDaysAfter(last);
-    final lastToDisplay = last.add(Duration(days: daysAfter));
+      final regularRowCount = _getRowCount(format, focusedDay);
 
-    final regularRowCount = _getRowCount(format, focusedDay);
+      int rowCount = 0;
 
-    int rowCount = 0;
-
-    for (int i = 0; i < regularRowCount; i++) {
-      for (DateTime date = firstToDisplay;
-          date.isBefore(lastToDisplay) || date.isAtSameMomentAs(lastToDisplay);
-          date = date.add(Duration(days: 1))) {
-        final hasAvailableSlot =
-            widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
-        if (hasAvailableSlot) {
-          rowCount++;
+      DateTime datePointer = firstToDisplay;
+      for (int i = 0; i < regularRowCount; i++) {
+        print('row number $i');
+        final endOfTheRowDate = datePointer.add(Duration(days: 7));
+        for (DateTime date = datePointer;
+            date.isBefore(endOfTheRowDate) ||
+                date.isAtSameMomentAs(endOfTheRowDate);
+            date = date.add(Duration(days: 1))) {
+          print('day number ${date.day}');
+          final hasAvailableSlot =
+              widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
+          if (hasAvailableSlot) {
+            rowCount++;
+            print('incremented: $rowCount');
+            break;
+          }
         }
-        if (date.weekday == DateTime.sunday && date != lastToDisplay) {
-          rowCount++; // Increment row count at the end of each week
-        }
+        datePointer = datePointer.add(Duration(days: 7));
       }
-    }
+      print("rowCount $rowCount");
 
-    return rowCount;
+      return rowCount;
+    } catch (e) {
+      print(e);
+      return 0;
+    }
   }
 
   bool _isSameDay(DateTime date1, DateTime date2) {
