@@ -135,6 +135,8 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         return _getMonthCount(first, last) + 1;
+      case CalendarFormat.threeWeeks:
+        return _getThreeWeekCount(first, last) + 1;
       case CalendarFormat.twoWeeks:
         return _getTwoWeekCount(first, last) + 1;
       case CalendarFormat.week:
@@ -159,6 +161,10 @@ class CalendarCore extends StatelessWidget {
     return last.difference(_firstDayOfWeek(first)).inDays ~/ 14;
   }
 
+  int _getThreeWeekCount(DateTime first, DateTime last) {
+    return last.difference(_firstDayOfWeek(first)).inDays ~/ 21;
+  }
+
   DateTime _getFocusedDay(
       CalendarFormat format, DateTime prevFocusedDay, int pageIndex) {
     if (pageIndex == previousIndex) {
@@ -171,6 +177,10 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month + pageDif);
+        break;
+      case CalendarFormat.threeWeeks:
+        day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
+            prevFocusedDay.day + pageDif * 21);
         break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(prevFocusedDay.year, prevFocusedDay.month,
@@ -197,6 +207,10 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         day = DateTime.utc(firstDay.year, firstDay.month + pageIndex);
+        break;
+      case CalendarFormat.threeWeeks:
+        day = DateTime.utc(
+            firstDay.year, firstDay.month, firstDay.day + pageIndex * 21);
         break;
       case CalendarFormat.twoWeeks:
         day = DateTime.utc(
