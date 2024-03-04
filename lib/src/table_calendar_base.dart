@@ -8,6 +8,7 @@ import 'shared/utils.dart';
 import 'widgets/calendar_core.dart';
 
 class TableCalendarBase extends StatefulWidget {
+  final List<DateTime> timeSlots;
   final DateTime firstDay;
   final DateTime lastDay;
   final DateTime focusedDay;
@@ -39,6 +40,7 @@ class TableCalendarBase extends StatefulWidget {
 
   TableCalendarBase({
     Key? key,
+    required this.timeSlots,
     required this.firstDay,
     required this.lastDay,
     required this.focusedDay,
@@ -206,6 +208,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
               );
             },
             child: CalendarCore(
+              timeSlots: widget.timeSlots,
               constraints: constraints,
               pageController: _pageController,
               scrollPhysics: _canScrollHorizontally

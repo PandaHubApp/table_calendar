@@ -10,6 +10,7 @@ typedef _OnCalendarPageChanged = void Function(
     int pageIndex, DateTime focusedDay);
 
 class CalendarCore extends StatelessWidget {
+  final List<DateTime> timeSlots;
   final DateTime? focusedDay;
   final DateTime firstDay;
   final DateTime lastDay;
@@ -36,6 +37,7 @@ class CalendarCore extends StatelessWidget {
   const CalendarCore({
     Key? key,
     this.dowBuilder,
+    required this.timeSlots,
     required this.dayBuilder,
     required this.onPageChanged,
     required this.firstDay,
@@ -101,7 +103,7 @@ class CalendarCore extends StatelessWidget {
             }
 
             return SizedBox(
-              height: rowHeight,
+              height: isDateInArray(timeSlots, day) ? rowHeight : 36,
               //  constrainedRowHeight ??
               // rowHeight,
               child: dayBuilder(context, day, baseDay),
@@ -344,4 +346,22 @@ class CalendarCore extends StatelessWidget {
 
     return daysAfter;
   }
+}
+
+bool isDateInArray(List<DateTime>? timestamps, DateTime dateTime) {
+  DateTime dateToCheck = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+  int dateToCheckInMilliseconds = dateToCheck.millisecondsSinceEpoch;
+
+  if (timestamps == null) return true;
+
+  List<int> timestampArrayInMilliSeconds = timestamps.map((timestamp) {
+    DateTime timestampWithoutTime =
+        DateTime(timestamp.year, timestamp.month, timestamp.day);
+    return timestampWithoutTime.millisecondsSinceEpoch;
+  }).toList();
+
+  var distinctTimestamps = timestampArrayInMilliSeconds.toSet().toList();
+
+  return distinctTimestamps.contains(dateToCheckInMilliseconds);
 }
