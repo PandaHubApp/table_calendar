@@ -227,7 +227,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                     onRightChevronTap: _onRightChevronTap,
                     onHeaderTap: () {},
                     headerStyle: HeaderStyle(
-                        formatButtonVisible: false, titleCentered: true),
+                        formatButtonVisible: false,
+                        titleCentered: true,
+                        headerPadding: EdgeInsets.zero),
                     availableCalendarFormats: widget.availableCalendarFormats,
                     calendarFormat: widget.calendarFormat,
                     onFormatButtonTap: (_) {},
