@@ -348,6 +348,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
     DateTime currentDate = firstToDisplay;
     int rowCount = 0;
+
+    print('starting calculation');
     while (currentDate.isBefore(lastToDisplay) ||
         currentDate.isAtSameMomentAs(lastToDisplay)) {
       bool hasAvailableSlotInRow = false;
@@ -357,14 +359,14 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
           hasAvailableSlotInRow = true;
           break;
         }
-        currentDate = currentDate.add(Duration(days: 1));
       }
       if (hasAvailableSlotInRow) {
         rowCount++;
       }
+      currentDate = currentDate.add(Duration(days: 7));
     }
 
-    return rowCount.clamp(0, 3); // Limit rowCount to be between 0 and 3
+    return rowCount; // Limit rowCount to be between 0 and 3
   }
 
   bool _isSameDay(DateTime date1, DateTime date2) {
