@@ -277,6 +277,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final tablePaddingHeight = widget.tablePadding?.vertical ?? 0.0;
     final dowHeight = widget.dowVisible ? widget.dowHeight! : 0.0;
     print(activeRowCount);
+    print(dowHeight +
+        rowCount * widget.rowHeight +
+        tablePaddingHeight +
+        activeRowCount * 30);
     return dowHeight +
         rowCount * widget.rowHeight +
         tablePaddingHeight +
