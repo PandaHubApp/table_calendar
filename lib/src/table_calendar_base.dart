@@ -346,17 +346,21 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final daysAfter = _getDaysAfter(last);
     final lastToDisplay = last.add(Duration(days: daysAfter));
 
+    DateTime currentDate = firstToDisplay;
     int rowCount = 0;
-    for (DateTime date = firstToDisplay;
-        date.isBefore(lastToDisplay) || date.isAtSameMomentAs(lastToDisplay);
-        date = date.add(Duration(days: 1))) {
-      final hasAvailableSlot =
-          widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
-      if (hasAvailableSlot) {
-        rowCount++;
+    while (currentDate.isBefore(lastToDisplay) ||
+        currentDate.isAtSameMomentAs(lastToDisplay)) {
+      bool hasAvailableSlotInRow = false;
+      for (int i = 0; i < 7; i++) {
+        if (widget.timeSlots
+            .any((timeSlot) => _isSameDay(timeSlot, currentDate))) {
+          hasAvailableSlotInRow = true;
+          break;
+        }
+        currentDate = currentDate.add(Duration(days: 1));
       }
-      if (date.weekday == DateTime.sunday && date != lastToDisplay) {
-        rowCount++; // Increment row count at the end of each week
+      if (hasAvailableSlotInRow) {
+        rowCount++;
       }
     }
 
