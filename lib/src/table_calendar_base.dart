@@ -352,8 +352,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     print('starting calculation');
     while (currentDate.isBefore(lastToDisplay) ||
         currentDate.isAtSameMomentAs(lastToDisplay)) {
+      print('while loop iteration');
       bool hasAvailableSlotInRow = false;
       for (int i = 0; i < 7; i++) {
+        print('for loop iteration $i');
         if (widget.timeSlots
             .any((timeSlot) => _isSameDay(timeSlot, currentDate))) {
           hasAvailableSlotInRow = true;
