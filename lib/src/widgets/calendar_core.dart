@@ -101,7 +101,7 @@ class CalendarCore extends StatelessWidget {
             }
 
             return SizedBox(
-              height: 66,
+              height: rowHeight,
               //  constrainedRowHeight ??
               // rowHeight,
               child: dayBuilder(context, day, baseDay),
@@ -235,6 +235,8 @@ class CalendarCore extends StatelessWidget {
     switch (format) {
       case CalendarFormat.month:
         return _daysInMonth(focusedDay);
+      case CalendarFormat.threeWeeks:
+        return _daysInThreeWeeks(focusedDay);
       case CalendarFormat.twoWeeks:
         return _daysInTwoWeeks(focusedDay);
       case CalendarFormat.week:
@@ -255,6 +257,13 @@ class CalendarCore extends StatelessWidget {
     final daysBefore = _getDaysBefore(focusedDay);
     final firstToDisplay = focusedDay.subtract(Duration(days: daysBefore));
     final lastToDisplay = firstToDisplay.add(const Duration(days: 14));
+    return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
+  }
+
+  DateTimeRange _daysInThreeWeeks(DateTime focusedDay) {
+    final daysBefore = _getDaysBefore(focusedDay);
+    final firstToDisplay = focusedDay.subtract(Duration(days: daysBefore));
+    final lastToDisplay = firstToDisplay.add(const Duration(days: 21));
     return DateTimeRange(start: firstToDisplay, end: lastToDisplay);
   }
 
@@ -300,7 +309,9 @@ class CalendarCore extends StatelessWidget {
   }
 
   int _getRowCount(CalendarFormat format, DateTime focusedDay) {
-    if (format == CalendarFormat.twoWeeks) {
+    if (format == CalendarFormat.threeWeeks) {
+      return 3;
+    } else if (format == CalendarFormat.twoWeeks) {
       return 2;
     } else if (format == CalendarFormat.week) {
       return 1;
