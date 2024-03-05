@@ -90,26 +90,26 @@ class TableCalendarBase extends StatefulWidget {
 class _TableCalendarBaseState extends State<TableCalendarBase> {
   late final ValueNotifier<double> _pageHeight;
 
-  late final ValueNotifier<DateTime> _focusedDayNotifier;
+  // late final ValueNotifier<DateTime> _focusedDayNotifier;
   late final PageController _pageController;
-  late DateTime _focusedDay;
+  late ValueNotifier<DateTime> _focusedDay;
   late int _previousIndex;
   late bool _pageCallbackDisabled;
 
   @override
   void initState() {
     super.initState();
-    _focusedDay = widget.focusedDay;
+    _focusedDay = ValueNotifier(widget.focusedDay);
 
-    final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-    final activeRowCount =
-        _getRowCountWithAvailableSlots(widget.calendarFormat, _focusedDay);
+    final rowCount = _getRowCount(widget.calendarFormat, _focusedDay.value);
+    final activeRowCount = _getRowCountWithAvailableSlots(
+        widget.calendarFormat, _focusedDay.value);
     _pageHeight = ValueNotifier(_getPageHeight(rowCount, activeRowCount));
-    _focusedDayNotifier = ValueNotifier(widget.focusedDay);
+    // _focusedDayNotifier = ValueNotifier(widget.focusedDay);
     print(_pageHeight);
 
     final initialPage = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, _focusedDay);
+        widget.calendarFormat, widget.firstDay, _focusedDay.value);
 
     _pageController = PageController(initialPage: initialPage);
     widget.onCalendarCreated?.call(_pageController);
@@ -122,12 +122,12 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   void didUpdateWidget(TableCalendarBase oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (_focusedDay != widget.focusedDay ||
+    if (_focusedDay.value != widget.focusedDay ||
         widget.calendarFormat != oldWidget.calendarFormat ||
         widget.startingDayOfWeek != oldWidget.startingDayOfWeek) {
-      final shouldAnimate = _focusedDay != widget.focusedDay;
+      final shouldAnimate = _focusedDay.value != widget.focusedDay;
 
-      _focusedDay = widget.focusedDay;
+      _focusedDay.value = widget.focusedDay;
       _updatePage(shouldAnimate: shouldAnimate);
     }
 
@@ -135,9 +135,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         widget.dowHeight != oldWidget.dowHeight ||
         widget.dowVisible != oldWidget.dowVisible ||
         widget.sixWeekMonthsEnforced != oldWidget.sixWeekMonthsEnforced) {
-      final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-      final activeRowCount =
-          _getRowCountWithAvailableSlots(widget.calendarFormat, _focusedDay);
+      final rowCount = _getRowCount(widget.calendarFormat, _focusedDay.value);
+      final activeRowCount = _getRowCountWithAvailableSlots(
+          widget.calendarFormat, _focusedDay.value);
       _pageHeight.value = _getPageHeight(rowCount, activeRowCount);
     }
   }
@@ -159,7 +159,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
   void _updatePage({bool shouldAnimate = false}) {
     final currentIndex = _calculateFocusedPage(
-        widget.calendarFormat, widget.firstDay, _focusedDay);
+        widget.calendarFormat, widget.firstDay, _focusedDay.value);
 
     final endIndex = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, widget.lastDay);
@@ -188,9 +188,9 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     }
 
     _previousIndex = currentIndex;
-    final rowCount = _getRowCount(widget.calendarFormat, _focusedDay);
-    final activeRowCount =
-        _getRowCountWithAvailableSlots(widget.calendarFormat, _focusedDay);
+    final rowCount = _getRowCount(widget.calendarFormat, _focusedDay.value);
+    final activeRowCount = _getRowCountWithAvailableSlots(
+        widget.calendarFormat, _focusedDay.value);
     _pageHeight.value = _getPageHeight(rowCount, activeRowCount);
 
     _pageCallbackDisabled = false;
@@ -218,7 +218,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
           children: [
             if (true)
               ValueListenableBuilder<DateTime>(
-                valueListenable: _focusedDayNotifier,
+                valueListenable: _focusedDay,
                 builder: (context, value, _) {
                   return CalendarHeader(
                     headerTitleBuilder: null,
@@ -270,7 +270,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                   startingDayOfWeek: widget.startingDayOfWeek,
                   calendarFormat: widget.calendarFormat,
                   previousIndex: _previousIndex,
-                  focusedDay: _focusedDay,
+                  focusedDay: _focusedDay.value,
                   sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
                   dowVisible: widget.dowVisible,
                   dowHeight: widget.dowHeight,
@@ -283,8 +283,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                   tablePadding: widget.tablePadding,
                   onPageChanged: (index, focusedMonth) {
                     if (!_pageCallbackDisabled) {
-                      if (!isSameDay(_focusedDay, focusedMonth)) {
-                        _focusedDay = focusedMonth;
+                      if (!isSameDay(_focusedDay.value, focusedMonth)) {
+                        _focusedDay.value = focusedMonth;
                       }
 
                       if (widget.calendarFormat == CalendarFormat.month &&
@@ -296,7 +296,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                         );
                         final activeRowCount = _getRowCountWithAvailableSlots(
                           widget.calendarFormat,
-                          _focusedDay,
+                          _focusedDay.value,
                         );
                         _pageHeight.value =
                             _getPageHeight(rowCount, activeRowCount);
