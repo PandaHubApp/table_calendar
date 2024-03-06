@@ -11,6 +11,7 @@ import 'widgets/calendar_core.dart';
 
 class TableCalendarBase extends StatefulWidget {
   final List<DateTime> timeSlots;
+  final List<DateTime> weather14Days;
   final DateTime firstDay;
   final DateTime lastDay;
   final DateTime focusedDay;
@@ -43,6 +44,7 @@ class TableCalendarBase extends StatefulWidget {
   TableCalendarBase({
     Key? key,
     required this.timeSlots,
+    required this.weather14Days,
     required this.firstDay,
     required this.lastDay,
     required this.focusedDay,
@@ -387,24 +389,22 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
       DateTime datePointer = firstToDisplay;
       for (int i = 0; i < regularRowCount; i++) {
-        // print('row number $i');
         final endOfTheRowDate = datePointer.add(Duration(days: 7));
         for (DateTime date = datePointer;
             date.isBefore(endOfTheRowDate) ||
                 date.isAtSameMomentAs(endOfTheRowDate);
             date = date.add(Duration(days: 1))) {
-          // print('day number ${date.day}');
-          final hasAvailableSlot =
-              widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date));
-          if (hasAvailableSlot) {
+          final hasAvailableSlotOrWeather =
+              widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date)) ||
+                  widget.weather14Days
+                      .any((weatherDay) => _isSameDay(weatherDay, date));
+          if (hasAvailableSlotOrWeather) {
             rowCount++;
-            // print('incremented: $rowCount');
             break;
           }
         }
         datePointer = datePointer.add(Duration(days: 7));
       }
-      // print("rowCount $rowCount");
 
       return rowCount;
     } catch (e) {
