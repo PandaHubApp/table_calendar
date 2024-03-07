@@ -397,8 +397,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
             date = date.add(Duration(days: 1))) {
           final hasAvailableSlotOrWeather =
               widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date)) ||
-                  widget.weather14Days
-                      .any((weatherDay) => _isSameDay(weatherDay, date));
+                      widget.weather14Days.length > 0
+                  ? widget.weather14Days
+                      .sublist(1)
+                      .any((weatherDay) => _isSameDay(weatherDay, date))
+                  : false;
           if (hasAvailableSlotOrWeather) {
             rowCount++;
             break;
