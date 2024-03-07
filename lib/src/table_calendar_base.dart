@@ -108,7 +108,6 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         widget.calendarFormat, _focusedDay.value);
     _pageHeight = ValueNotifier(_getPageHeight(rowCount, activeRowCount));
     // _focusedDayNotifier = ValueNotifier(widget.focusedDay);
-    print(_pageHeight);
 
     final initialPage = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, _focusedDay.value);
@@ -218,27 +217,26 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
       builder: (context, constraints) {
         return Column(
           children: [
-            if (true)
-              ValueListenableBuilder<DateTime>(
-                valueListenable: _focusedDay,
-                builder: (context, value, _) {
-                  return CalendarHeader(
-                    headerTitleBuilder: null,
-                    focusedMonth: value,
-                    onLeftChevronTap: _onLeftChevronTap,
-                    onRightChevronTap: _onRightChevronTap,
-                    onHeaderTap: () {},
-                    headerStyle: HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
-                        headerPadding: EdgeInsets.zero),
-                    availableCalendarFormats: widget.availableCalendarFormats,
-                    calendarFormat: widget.calendarFormat,
-                    onFormatButtonTap: (_) {},
-                    onHeaderLongPress: () {},
-                  );
-                },
-              ),
+            ValueListenableBuilder<DateTime>(
+              valueListenable: _focusedDay,
+              builder: (context, value, _) {
+                return CalendarHeader(
+                  headerTitleBuilder: null,
+                  focusedMonth: value,
+                  onLeftChevronTap: _onLeftChevronTap,
+                  onRightChevronTap: _onRightChevronTap,
+                  onHeaderTap: () {},
+                  headerStyle: HeaderStyle(
+                      formatButtonVisible: false,
+                      titleCentered: true,
+                      headerPadding: EdgeInsets.zero),
+                  availableCalendarFormats: widget.availableCalendarFormats,
+                  calendarFormat: widget.calendarFormat,
+                  onFormatButtonTap: (_) {},
+                  onHeaderLongPress: () {},
+                );
+              },
+            ),
             SimpleGestureDetector(
               onVerticalSwipe:
                   _canScrollVertically ? widget.onVerticalSwipe : null,
