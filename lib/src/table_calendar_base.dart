@@ -389,6 +389,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
       int rowCount = 0;
 
       DateTime datePointer = firstToDisplay;
+      print('before');
       for (int i = 0; i < regularRowCount; i++) {
         final endOfTheRowDate = datePointer.add(Duration(days: 7));
         for (DateTime date = datePointer;
@@ -411,6 +412,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         }
         datePointer = datePointer.add(Duration(days: 7));
       }
+      print('after');
 
       return rowCount;
     } catch (e) {
