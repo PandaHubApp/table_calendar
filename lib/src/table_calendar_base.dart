@@ -395,13 +395,15 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
             date.isBefore(endOfTheRowDate) ||
                 date.isAtSameMomentAs(endOfTheRowDate);
             date = date.add(Duration(days: 1))) {
-          final hasAvailableSlotOrWeather =
-              widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date)) ||
-                      widget.weather14Days.length > 0
-                  ? widget.weather14Days
-                      .sublist(1)
-                      .any((weatherDay) => _isSameDay(weatherDay, date))
-                  : false;
+          final hasAvailableSlotOrWeather = widget.weather14Days.length > 0
+              ? widget.weather14Days
+                  .sublist(1)
+                  .any((weatherDay) => _isSameDay(weatherDay, date))
+              // check for timeslots availability
+              //     &&
+              // widget.timeSlots.any((timeSlot) => _isSameDay(timeSlot, date))
+              : false;
+
           if (hasAvailableSlotOrWeather) {
             rowCount++;
             break;

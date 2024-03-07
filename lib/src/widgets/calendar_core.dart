@@ -105,12 +105,14 @@ class CalendarCore extends StatelessWidget {
             }
 
             return SizedBox(
-              height: isDateInArray(timeSlots, day) ||
-                      isDateInArray(
+              height:
+                  // check for timeslots availability
+                  // isDateInArray(timeSlots, day) ||
+                  isDateInArray(
                           weather.length > 0 ? weather.sublist(1) : weather,
                           day)
-                  ? rowHeight
-                  : 36,
+                      ? rowHeight
+                      : 36,
               //  constrainedRowHeight ??
               // rowHeight,
               child: dayBuilder(context, day, baseDay),
