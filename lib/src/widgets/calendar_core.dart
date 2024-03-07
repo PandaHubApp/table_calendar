@@ -11,6 +11,7 @@ typedef _OnCalendarPageChanged = void Function(
 
 class CalendarCore extends StatelessWidget {
   final List<DateTime> timeSlots;
+  final List<DateTime> weather;
   final DateTime? focusedDay;
   final DateTime firstDay;
   final DateTime lastDay;
@@ -38,6 +39,7 @@ class CalendarCore extends StatelessWidget {
     Key? key,
     this.dowBuilder,
     required this.timeSlots,
+    required this.weather,
     required this.dayBuilder,
     required this.onPageChanged,
     required this.firstDay,
@@ -103,7 +105,10 @@ class CalendarCore extends StatelessWidget {
             }
 
             return SizedBox(
-              height: isDateInArray(timeSlots, day) ? rowHeight : 36,
+              height:
+                  isDateInArray(timeSlots, day) || isDateInArray(weather, day)
+                      ? rowHeight
+                      : 36,
               //  constrainedRowHeight ??
               // rowHeight,
               child: dayBuilder(context, day, baseDay),

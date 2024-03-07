@@ -261,6 +261,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                   );
                 },
                 child: CalendarCore(
+                  weather: widget.weather14Days,
                   timeSlots: widget.timeSlots,
                   constraints: constraints,
                   pageController: _pageController,
