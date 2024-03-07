@@ -103,6 +103,14 @@ class CalendarCore extends StatelessWidget {
               baseDay =
                   _getFocusedDay(calendarFormat, previousFocusedDay, index);
             }
+            print('before111');
+            print(
+              isDateInArray(
+                      weather.length > 0 ? weather.sublist(1) : weather, day)
+                  ? rowHeight
+                  : 36,
+            );
+            print('afte111');
 
             return SizedBox(
               height:
