@@ -12,7 +12,6 @@ typedef _OnCalendarPageChanged = void Function(
 class CalendarCore extends StatelessWidget {
   final List<DateTime> timeSlots;
   final List<DateTime> weather;
-  final DateTime todayDay;
   final DateTime? focusedDay;
   final DateTime firstDay;
   final DateTime lastDay;
@@ -41,7 +40,6 @@ class CalendarCore extends StatelessWidget {
     this.dowBuilder,
     required this.timeSlots,
     required this.weather,
-    required this.todayDay,
     required this.dayBuilder,
     required this.onPageChanged,
     required this.firstDay,
@@ -114,7 +112,7 @@ class CalendarCore extends StatelessWidget {
                           weather.length > 0
                               ? weather
                                   .where((element) =>
-                                      !isSameDay(todayDay, element))
+                                      !isSameDay(firstDay, element))
                                   .toList()
                               : weather,
                           day)

@@ -479,7 +479,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         Flexible(
           flex: widget.shouldFillViewport ? 1 : 0,
           child: TableCalendarBase(
-            todayDay: DateTime.now(),
             weather14Days: [],
             timeSlots: [],
             onCalendarCreated: (pageController) {
