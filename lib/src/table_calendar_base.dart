@@ -12,6 +12,7 @@ import 'widgets/calendar_core.dart';
 class TableCalendarBase extends StatefulWidget {
   final List<DateTime> timeSlots;
   final List<DateTime> weather14Days;
+  final DateTime todayDay;
   final DateTime firstDay;
   final DateTime lastDay;
   final DateTime focusedDay;
@@ -45,6 +46,7 @@ class TableCalendarBase extends StatefulWidget {
     Key? key,
     required this.timeSlots,
     required this.weather14Days,
+    required this.todayDay,
     required this.firstDay,
     required this.lastDay,
     required this.focusedDay,
@@ -259,6 +261,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                   );
                 },
                 child: CalendarCore(
+                  todayDay: widget.todayDay,
                   weather: widget.weather14Days,
                   timeSlots: widget.timeSlots,
                   constraints: constraints,
@@ -395,7 +398,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
             date = date.add(Duration(days: 1))) {
           final hasAvailableSlotOrWeather = widget.weather14Days.length > 0
               ? widget.weather14Days
-                  .sublist(1)
+                  .where((element) => !isSameDay(widget.todayDay, element))
+                  .toList()
                   .any((weatherDay) => _isSameDay(weatherDay, date))
               // check for timeslots availability
               //     &&
