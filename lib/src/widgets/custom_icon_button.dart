@@ -16,7 +16,7 @@ class CustomIconButton extends StatelessWidget {
     required this.icon,
     required this.onTap,
     this.margin = const EdgeInsets.all(0.0),
-    this.padding = const EdgeInsets.all(8.0),
+    this.padding = const EdgeInsets.all(5.0),
   }) : super(key: key);
 
   @override
@@ -36,7 +36,7 @@ class CustomIconButton extends StatelessWidget {
           : Material(
               color: Colors.transparent,
               child: InkWell(
-                hoverColor: Color.fromARGB(1, 245, 245, 247),
+                hoverColor: Color.fromARGB(255, 245, 245, 247),
                 onTap: onTap,
                 borderRadius: BorderRadius.circular(100.0),
                 child: Padding(
