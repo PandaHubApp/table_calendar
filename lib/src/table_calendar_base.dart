@@ -233,7 +233,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                   headerStyle: HeaderStyle(
                     formatButtonVisible: false,
                     titleCentered: true,
-                    headerPadding: EdgeInsets.zero,
+                    headerPadding:
+                        EdgeInsets.only(top: 14.0, left: 10, right: 10),
                     leftChevronIcon:
                         widget.headerLeftIcon ?? const Icon(Icons.chevron_left),
                     rightChevronIcon: widget.headerRightIcon ??
