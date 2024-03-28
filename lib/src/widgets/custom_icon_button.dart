@@ -33,13 +33,16 @@ class CustomIconButton extends StatelessWidget {
               padding: padding,
               child: icon,
             )
-          : InkWell(
-              hoverColor: Color.fromARGB(1, 245, 245, 247),
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(100.0),
-              child: Padding(
-                padding: padding,
-                child: icon,
+          : Material(
+              color: Colors.transparent,
+              child: InkWell(
+                hoverColor: Color.fromARGB(1, 245, 245, 247),
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(100.0),
+                child: Padding(
+                  padding: padding,
+                  child: icon,
+                ),
               ),
             ),
     );
