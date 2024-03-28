@@ -12,6 +12,8 @@ import 'widgets/calendar_core.dart';
 class TableCalendarBase extends StatefulWidget {
   final List<DateTime> timeSlots;
   final List<DateTime> weather14Days;
+  final Widget? headerLeftIcon;
+  final Widget? headerRightIcon;
   final DateTime firstDay;
   final DateTime lastDay;
   final DateTime focusedDay;
@@ -49,6 +51,8 @@ class TableCalendarBase extends StatefulWidget {
     required this.lastDay,
     required this.focusedDay,
     this.calendarFormat = CalendarFormat.month,
+    this.headerRightIcon,
+    this.headerLeftIcon,
     this.dowBuilder,
     required this.dayBuilder,
     this.dowHeight,
@@ -227,9 +231,14 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                   onRightChevronTap: _onRightChevronTap,
                   onHeaderTap: () {},
                   headerStyle: HeaderStyle(
-                      formatButtonVisible: false,
-                      titleCentered: true,
-                      headerPadding: EdgeInsets.zero),
+                    formatButtonVisible: false,
+                    titleCentered: true,
+                    headerPadding: EdgeInsets.zero,
+                    leftChevronIcon:
+                        widget.headerLeftIcon ?? const Icon(Icons.chevron_left),
+                    rightChevronIcon: widget.headerRightIcon ??
+                        const Icon(Icons.chevron_right),
+                  ),
                   availableCalendarFormats: widget.availableCalendarFormats,
                   calendarFormat: widget.calendarFormat,
                   onFormatButtonTap: (_) {},

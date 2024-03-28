@@ -34,6 +34,7 @@ class CustomIconButton extends StatelessWidget {
               child: icon,
             )
           : InkWell(
+              hoverColor: Color.fromARGB(1, 245, 245, 247),
               onTap: onTap,
               borderRadius: BorderRadius.circular(100.0),
               child: Padding(
