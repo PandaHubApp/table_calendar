@@ -105,6 +105,7 @@ class CalendarCore extends StatelessWidget {
             }
 
             return SizedBox(
+              width: 36,
               height:
                   // check for timeslots availability
                   // isDateInArray(timeSlots, day) ||
