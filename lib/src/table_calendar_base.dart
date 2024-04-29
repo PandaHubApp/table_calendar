@@ -118,7 +118,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final initialPage = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, _focusedDay.value);
 
-    widget.pageController.jumpTo(initialPage.toDouble());
+    // widget.pageController.jumpTo(initialPage.toDouble());
     widget.onCalendarCreated?.call(widget.pageController);
 
     _previousIndex = initialPage;
