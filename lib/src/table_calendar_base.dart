@@ -35,6 +35,7 @@ class TableCalendarBase extends StatefulWidget {
   final bool pageAnimationEnabled;
   final Duration pageAnimationDuration;
   final Curve pageAnimationCurve;
+  final PageController pageController;
   final StartingDayOfWeek startingDayOfWeek;
   final AvailableGestures availableGestures;
   final SimpleSwipeConfig simpleSwipeConfig;
@@ -50,6 +51,7 @@ class TableCalendarBase extends StatefulWidget {
     required this.firstDay,
     required this.lastDay,
     required this.focusedDay,
+    required this.pageController,
     this.calendarFormat = CalendarFormat.month,
     this.headerRightIcon,
     this.headerLeftIcon,
@@ -97,7 +99,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   late final ValueNotifier<double> _pageHeight;
 
   // late final ValueNotifier<DateTime> _focusedDayNotifier;
-  late final PageController _pageController;
+  // late final PageController widget.pageController;
   late ValueNotifier<DateTime> _focusedDay;
   late int _previousIndex;
   late bool _pageCallbackDisabled;
@@ -116,8 +118,8 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final initialPage = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, _focusedDay.value);
 
-    _pageController = PageController(initialPage: initialPage);
-    widget.onCalendarCreated?.call(_pageController);
+    widget.pageController.jumpTo(initialPage.toDouble());
+    widget.onCalendarCreated?.call(widget.pageController);
 
     _previousIndex = initialPage;
     _pageCallbackDisabled = false;
@@ -149,7 +151,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
 
   @override
   void dispose() {
-    _pageController.dispose();
+    widget.pageController.dispose();
     _pageHeight.dispose();
     super.dispose();
   }
@@ -180,16 +182,16 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
         final jumpIndex =
             currentIndex > _previousIndex ? currentIndex - 1 : currentIndex + 1;
 
-        _pageController.jumpToPage(jumpIndex);
+        widget.pageController.jumpToPage(jumpIndex);
       }
 
-      _pageController.animateToPage(
+      widget.pageController.animateToPage(
         currentIndex,
         duration: widget.pageAnimationDuration,
         curve: widget.pageAnimationCurve,
       );
     } else {
-      _pageController.jumpToPage(currentIndex);
+      widget.pageController.jumpToPage(currentIndex);
     }
 
     _previousIndex = currentIndex;
@@ -202,14 +204,14 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
   }
 
   void _onLeftChevronTap() {
-    _pageController.previousPage(
+    widget.pageController.previousPage(
       duration: widget.pageAnimationDuration,
       curve: widget.pageAnimationCurve,
     );
   }
 
   void _onRightChevronTap() {
-    _pageController.nextPage(
+    widget.pageController.nextPage(
       duration: widget.pageAnimationDuration,
       curve: widget.pageAnimationCurve,
     );
@@ -272,7 +274,7 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
                   weather: widget.weather14Days,
                   timeSlots: widget.timeSlots,
                   constraints: constraints,
-                  pageController: _pageController,
+                  pageController: widget.pageController,
                   scrollPhysics: _canScrollHorizontally
                       ? PageScrollPhysics()
                       : NeverScrollableScrollPhysics(),
