@@ -113,12 +113,10 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     final activeRowCount = _getRowCountWithAvailableSlots(
         widget.calendarFormat, _focusedDay.value);
     _pageHeight = ValueNotifier(_getPageHeight(rowCount, activeRowCount));
-    // _focusedDayNotifier = ValueNotifier(widget.focusedDay);
 
     final initialPage = _calculateFocusedPage(
         widget.calendarFormat, widget.firstDay, _focusedDay.value);
 
-    // widget.pageController.jumpTo(initialPage.toDouble());
     widget.onCalendarCreated?.call(widget.pageController);
 
     _previousIndex = initialPage;
