@@ -98,8 +98,6 @@ class TableCalendarBase extends StatefulWidget {
 class _TableCalendarBaseState extends State<TableCalendarBase> {
   late final ValueNotifier<double> _pageHeight;
 
-  // late final ValueNotifier<DateTime> _focusedDayNotifier;
-  // late final PageController widget.pageController;
   late ValueNotifier<DateTime> _focusedDay;
   late int _previousIndex;
   late bool _pageCallbackDisabled;
