@@ -335,7 +335,11 @@ class _TableCalendarBaseState extends State<TableCalendarBase> {
     print(dowHeight + rowCount * 36 + tablePaddingHeight + activeRowCount * 30);
     print(activeRowCount);
     print(rowCount);
-    return dowHeight + rowCount * 38 + tablePaddingHeight + activeRowCount * 30;
+    return dowHeight +
+        rowCount * 38 +
+        tablePaddingHeight +
+        activeRowCount * 30 +
+        200;
   }
 
   int _calculateFocusedPage(
