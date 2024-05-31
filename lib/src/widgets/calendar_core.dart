@@ -28,6 +28,7 @@ class CalendarCore extends StatelessWidget {
   final EdgeInsets? tablePadding;
   final double? dowHeight;
   final double? rowHeight;
+  final double? cellSize;
   final BoxConstraints constraints;
   final int? previousIndex;
   final StartingDayOfWeek startingDayOfWeek;
@@ -47,6 +48,7 @@ class CalendarCore extends StatelessWidget {
     required this.constraints,
     this.dowHeight,
     this.rowHeight,
+    this.cellSize,
     this.startingDayOfWeek = StartingDayOfWeek.sunday,
     this.calendarFormat = CalendarFormat.month,
     this.pageController,
@@ -105,7 +107,7 @@ class CalendarCore extends StatelessWidget {
             }
 
             return SizedBox(
-              width: 36,
+              width: cellSize,
               height:
                   // check for timeslots availability
                   // isDateInArray(timeSlots, day) ||
@@ -118,7 +120,7 @@ class CalendarCore extends StatelessWidget {
                               : weather,
                           day)
                       ? rowHeight
-                      : 36,
+                      : cellSize,
               //  constrainedRowHeight ??
               // rowHeight,
               child: dayBuilder(context, day, baseDay),
